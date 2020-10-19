@@ -1,0 +1,17 @@
+#include "msp430g2553.h"            // Library is used specifically for the MSP430G2553 Launchpad
+
+int main(void) {
+	WDTCTL = WDTPW | WDTHOLD;	    // stop watchdog timer
+	
+	P1DIR &= ~BIT3;                 // Configure P1.3 as an input for the PIR Motion sensor output
+	P2DIR &= BIT0;                  // Configure P2.0 as an output for the buzzer and the LED
+
+	while(1) {                      // Loop runs continuously
+	    if(!(P1IN & BIT3)) {        // Checks P1.3/Motion sensor for HIGH voltage reading.
+	        P2DIR = BIT0;           // Turns on LED and buzzer when motion is detected
+	        __delay_cycles(100);    // Time delay for effect
+	        P2DIR = ~BIT0;          // Turns off LED and buzzer
+	        __delay_cycles(100);    // Time delay for effect
+	    }
+	}
+}
